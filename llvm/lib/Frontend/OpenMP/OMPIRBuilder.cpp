@@ -680,13 +680,13 @@ void OpenMPIRBuilder::finalize(Function *Fn) {
     Function *OutlinedFn = Extractor.extractCodeRegion(CEAC);
 
     // Forward target-cpu, target-features attributes to the outlined function.
-    if (auto Attr = OuterFn->getFnAttribute("target-cpu");
-        Attr.isStringAttribute())
-      OutlinedFn->addFnAttr(Attr);
+    auto TargetCpuAttr = OuterFn->getFnAttribute("target-cpu");
+    if (TargetCpuAttr.isStringAttribute())
+      OutlinedFn->addFnAttr(TargetCpuAttr);
 
-    if (auto Attr = OuterFn->getFnAttribute("target-features");
-        Attr.isStringAttribute())
-      OutlinedFn->addFnAttr(Attr);
+    auto TargetFeaturesAttr = OuterFn->getFnAttribute("target-features");
+    if (TargetFeaturesAttr.isStringAttribute())
+      OutlinedFn->addFnAttr(TargetFeaturesAttr);
 
     LLVM_DEBUG(dbgs() << "After      outlining: " << *OuterFn << "\n");
     LLVM_DEBUG(dbgs() << "   Outlined function: " << *OutlinedFn << "\n");
