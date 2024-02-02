@@ -2481,6 +2481,7 @@ genSingleOp(Fortran::lower::AbstractConverter &converter,
             const Fortran::parser::OmpClauseList &beginClauseList,
             const Fortran::parser::OmpClauseList &endClauseList) {
   llvm::SmallVector<mlir::Value> allocateOperands, allocatorOperands;
+  llvm::SmallVector<mlir::Value> copyPrivateVars;
   mlir::UnitAttr nowaitAttr;
 
   ClauseProcessor cp(converter, beginClauseList);
@@ -2493,7 +2494,8 @@ genSingleOp(Fortran::lower::AbstractConverter &converter,
   return genOpWithBody<mlir::omp::SingleOp>(
       converter, eval, genNested, currentLocation,
       /*outerCombined=*/false, &beginClauseList, allocateOperands,
-      allocatorOperands, nowaitAttr);
+      allocatorOperands, copyPrivateVars, /*copyPrivateFuncs=*/nullptr,
+      nowaitAttr);
 }
 
 static mlir::omp::TaskOp
